@@ -14,19 +14,22 @@ def do_deploy(archive_path):
     if exists(archive_path) is False:
         return False
     try:
-        file_n = archive_path.split("/")[-1]
-        no_ext = file_n.split(".")[0]
-        path = "/data/web_static/releases/"
-        put(archive_path, '/tmp/')
-        run('mkdir -p {}{}/'.format(path, no_ext))
-        run('tar -xzf /tmp/{} -C {}{}/'.format(file_n, path, no_ext))
-        run('rm /tmp/{}'.format(file_n))
-        run('mkdir -p /data/web_static/current/hbnb_static')
-        run('mv {0}{1}/* /data/web_static/current/hbnb_static/'.format(path, no_ext))
-        run('rm -rf {}{}/web_static'.format(path, no_ext))
-        run('rm -rf /data/web_static/current')
-        run('ln -s {}{}/ /data/web_static/current'.format(path, no_ext))
+        filename = os.path.basename(archive_path)
+        dfile = filename.split(".")[0]
+        put(archive_path, "/tmp/")
+        sudo("mkdir -p /data/web_static/releases/{}/".format(dfile))
+        sudo("tar -xzf /tmp/{} -C /data/web_static/releases/{}/"
+             .format(filename, dfile))
+        sudo("rm /tmp/{}".format(filename))
+        sudo(
+            "mv /data/web_static/releases/{}/web_static/* "
+            "/data/web_static/releases/{}/"
+            .format(dfile, dfile))
+        sudo("rm -rf /data/web_static/releases/{}/web_static"
+             .format(dfile))
+        sudo("rm -rf /data/web_static/current")
+        sudo("ln -s /data/web_static/releases/{} /data/web_static/current"
+             .format(dfile))
         return True
-    except Exception as e:
-        print("Deployment failed: {}".format(e))
+    except Exception:
         return False
