@@ -21,5 +21,16 @@ def c(text):
     text = text.replace("_", " ")
     return ('C' + ' ' + text)
 
+@app.route('/python', strict_slashes=False)
+@app.route('/python/<path:text>', strict_slashes=False)
+def python(text=None):
+    """ Route to return text follow by "is cool"
+        (can be overwritten), replaces _ with spaces """
+    if text is None:
+        text = 'is cool'
+    else:
+        text = text.replace('_', ' ')
+    return ('Python' + ' ' + text)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
