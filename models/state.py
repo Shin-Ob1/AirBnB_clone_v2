@@ -17,15 +17,11 @@ class State(BaseModel, Base):
     else:
         @property
         def cities(self):
-        var = models.storage.all()
-        lista = []
-        result = []
-        for key in var:
-            city = key.replace('.', ' ')
-            city = shlex.split(city)
-            if (city[0] == 'City'):
-                lista.append(var[key])
-        for elem in lista:
-            if (elem.state_id == self.id):
-                result.append(elem)
-        return (result)
+            """Getter attribute for cities"""
+            city_list = []
+            from models import storage
+            for city, obj in storage.__objects.items():
+                if "City" in city and (obj.state_id == State.id):
+                    city_list.append(obj)
+
+            return city_list
