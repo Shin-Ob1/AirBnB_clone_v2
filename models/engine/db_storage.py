@@ -83,3 +83,8 @@ class DBStorage():
         # Wrap the sessionmaker in a scoped_session to make it thread-safe
         self.__session = scoped_session(Session)
         Base.metadata.create_all(self.__engine)
+
+    def close(self):
+        """ calls remove()
+        """
+        self.__session.close()
