@@ -20,8 +20,8 @@ class State(BaseModel, Base):
             """Getter attribute for cities"""
             city_list = []
             from models import storage
-            for city, obj in storage.__objects.items():
-                if "City" in city and (obj.state_id == State.id):
+            for city, obj in storage.all().items():
+                if "City" in city and (obj.state_id == self.id):
                     city_list.append(obj)
 
             return city_list
